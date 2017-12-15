@@ -1,8 +1,7 @@
 import { test } from '~util/testing'
-import { mount } from 'avoriaz'
 import VSystemBar from '~components/VSystemBar'
 
-test('VSystemBar.vue', () => {
+test('VSystemBar.vue', ({ mount }) => {
   it('should render a colored system bar', () => {
     const wrapper = mount(VSystemBar, {
       propsData: {
@@ -41,23 +40,26 @@ test('VSystemBar.vue', () => {
       }
     })
 
-    expect(wrapper.vm.$vuetify.application.bar).toBe(0)
-
-    wrapper.setProps({
-      fixed: false,
-      absolute: true
-    })
-    expect(wrapper.vm.$vuetify.application.bar).toBe(24)
-
-    wrapper.setProps({
-      fixed: true,
-      absolute: false
-    })
     expect(wrapper.vm.$vuetify.application.bar).toBe(24)
 
     wrapper.setProps({
       window: true
     })
     expect(wrapper.vm.$vuetify.application.bar).toBe(32)
+
+    wrapper.setProps({
+      height: 90
+    })
+    expect(wrapper.vm.$vuetify.application.bar).toBe(90)
+  })
+
+  it('should warn for improper height', () => {
+    const wrapper = mount(VSystemBar, {
+      propsData: {
+        height: 'foo'
+      }
+    })
+
+    expect('custom validator check failed for prop "height"').toHaveBeenWarned()
   })
 })

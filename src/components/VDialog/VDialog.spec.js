@@ -1,14 +1,12 @@
 import VDialog from '~components/VDialog'
 import { test } from '~util/testing'
-import { mount } from 'avoriaz'
-import { compileToFunctions } from 'vue-template-compiler'
 
-test('VDialog.js', () => {
+test('VDialog.js', ({ mount, compileToFunctions }) => {
   it('should render component and match snapshot', () => {
     const wrapper = mount(VDialog)
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should render a disabled component and match snapshot', () => {
@@ -19,7 +17,7 @@ test('VDialog.js', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should render a persistent component and match snapshot', () => {
@@ -30,7 +28,7 @@ test('VDialog.js', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should render a fullscreen component and match snapshot', () => {
@@ -41,7 +39,7 @@ test('VDialog.js', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should render a lazy component and match snapshot', () => {
@@ -52,7 +50,7 @@ test('VDialog.js', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should render a scrollable component and match snapshot', () => {
@@ -63,7 +61,7 @@ test('VDialog.js', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should render component with custom origin and match snapshot', () => {
@@ -74,7 +72,7 @@ test('VDialog.js', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should render component with custom width (max-width) and match snapshot', () => {
@@ -85,7 +83,7 @@ test('VDialog.js', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should render component with custom transition and match snapshot', () => {
@@ -96,7 +94,7 @@ test('VDialog.js', () => {
     })
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should open dialog on activator click', async () => {
@@ -115,7 +113,7 @@ test('VDialog.js', () => {
     await wrapper.vm.$nextTick()
     expect(input).toBeCalledWith(true)
 
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('not should open disabed dialog on activator click', async () => {
@@ -137,7 +135,7 @@ test('VDialog.js', () => {
     await wrapper.vm.$nextTick()
     expect(input).not.toBeCalled()
 
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('not change state on v-model update', async () => {
@@ -164,7 +162,7 @@ test('VDialog.js', () => {
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.isActive).toBe(false)
 
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should emit keydown event', async () => {
@@ -184,6 +182,6 @@ test('VDialog.js', () => {
     window.dispatchEvent(new Event('keydown'))
     expect(keydown).toBeCalled()
 
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 })

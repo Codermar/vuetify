@@ -1,9 +1,16 @@
 import Vue from 'vue'
-import { test } from '~util/testing'
-import { mount } from 'avoriaz'
+import { test, resizeWindow } from '~util/testing'
+import VApp from '~components/VApp'
 import VToolbar from '~components/VToolbar'
 
-test('VToolbar.vue', () => {
+const scrollWindow = y => {
+  global.pageYOffset = y
+  global.dispatchEvent(new Event('scroll'))
+
+  return new Promise(resolve => setTimeout(resolve, 200))
+}
+
+test('VToolbar.vue', ({ mount }) => {
   it('should render a colored toolbar', () => {
     const wrapper = mount(VToolbar, {
       propsData: {
@@ -43,17 +50,17 @@ test('VToolbar.vue', () => {
     wrapper.vm.$vuetify.application.right = 84
 
     wrapper.setProps({ app: false, clippedLeft: false, clippedRight: false })
-    expect(wrapper.vm.paddingLeft).toBe(0)
-    expect(wrapper.vm.paddingRight).toBe(0)
+    expect(wrapper.vm.computedPaddingLeft).toBe(0)
+    expect(wrapper.vm.computedPaddingRight).toBe(0)
     wrapper.setProps({ app: false, clippedLeft: true, clippedRight: true })
-    expect(wrapper.vm.paddingLeft).toBe(0)
-    expect(wrapper.vm.paddingRight).toBe(0)
+    expect(wrapper.vm.computedPaddingLeft).toBe(0)
+    expect(wrapper.vm.computedPaddingRight).toBe(0)
     wrapper.setProps({ app: true, clippedLeft: false, clippedRight: false })
-    expect(wrapper.vm.paddingLeft).toBe(42)
-    expect(wrapper.vm.paddingRight).toBe(84)
+    expect(wrapper.vm.computedPaddingLeft).toBe(42)
+    expect(wrapper.vm.computedPaddingRight).toBe(84)
     wrapper.setProps({ app: true, clippedLeft: true, clippedRight: true })
-    expect(wrapper.vm.paddingLeft).toBe(0)
-    expect(wrapper.vm.paddingRight).toBe(0)
+    expect(wrapper.vm.computedPaddingLeft).toBe(0)
+    expect(wrapper.vm.computedPaddingRight).toBe(0)
   })
 
   it('should calculate application top', async () => {
@@ -111,5 +118,64 @@ test('VToolbar.vue', () => {
     Vue.set(wrapper.vm.$vuetify.breakpoint, 'width', 100)
     Vue.set(wrapper.vm.$vuetify.breakpoint, 'height', 200)
     expect(wrapper.vm.computedContentHeight).toBe(wrapper.vm.heights.mobile)
+  })
+
+  it('should set margin top', () => {
+    const wrapper = mount(VToolbar, {
+      propsData: {
+        app: true
+      }
+    })
+
+    Vue.set(wrapper.vm.$vuetify.application, 'bar', 24)
+    expect(wrapper.vm.computedMarginTop).toBe(24)
+  })
+
+  it('should set active based on manual scroll', async () => {
+    const wrapper = mount(VToolbar, {
+      propsData: {
+        scrollOffScreen: true
+      }
+    })
+
+    expect(wrapper.vm.isActive).toBe(true)
+    wrapper.setProps({ manualScroll: true })
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.isActive).toBe(false)
+  })
+
+  it.skip('should set a custom target', async () => {
+    const wrapper = mount(VToolbar, {
+      propsData: {
+        target: 'body'
+      }
+    })
+
+    wrapper.vm.onScroll()
+    expect(wrapper.vm.target).toBe('body')
+  })
+
+  it.skip('should set isScrollingUp', async () => {
+    const wrapper = mount(VToolbar)
+
+    await scrollWindow(100)
+    expect(wrapper.vm.isScrollingUp).toBe(false)
+    await scrollWindow(0)
+    expect(wrapper.vm.isScrollingUp).toBe(true)
+  })
+
+  it('should update the application content height if screen size changes', async () => {
+    const app = mount(VApp)
+    const wrapper = mount(VToolbar, {
+      propsData: {
+        app: true
+      }
+    })
+
+    await resizeWindow(1920)
+    expect(wrapper.vm.$vuetify.application.top).toBe(64)
+
+    await resizeWindow(200)
+    expect(wrapper.vm.$vuetify.application.top).toBe(56)
   })
 })

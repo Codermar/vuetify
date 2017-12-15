@@ -14,6 +14,7 @@ export default {
 
   created () {
     if (typeof document === 'undefined') {
+      this.$ssrContext && !this.$ssrContext._styles && (this.$ssrContext._styles = {})
       return this.$ssrContext && this.$ssrContext._styles &&
         (this.$ssrContext._styles['vuetify-theme-stylesheet'] = {
           ids: ['vuetify-theme-stylesheet'],
@@ -53,11 +54,13 @@ export default {
       return `.${key}--text{color:${value} !important;}`
     },
     genStyle () {
-      let style = document.querySelector('[data-vue-ssr-id=vuetify-theme-stylesheet]')
+      let style = document.querySelector('[data-vue-ssr-id=vuetify-theme-stylesheet]') ||
+        document.getElementById('vuetify-theme-stylesheet')
 
       if (!style) {
         style = document.createElement('style')
         style.type = 'text/css'
+        style.id = 'vuetify-theme-stylesheet'
         document.head.appendChild(style)
       }
 

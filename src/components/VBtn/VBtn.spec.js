@@ -1,5 +1,3 @@
-import { mount } from 'avoriaz'
-import { compileToFunctions } from 'vue-template-compiler'
 import { test } from '~util/testing'
 import Vue from 'vue'
 import VBtn from '~components/VBtn'
@@ -10,7 +8,7 @@ const stub = {
   render: h => h('button')
 }
 
-test('VBtn.js', () => {
+test('VBtn.js', ({ mount, compileToFunctions }) => {
   it('should render component and match snapshot', () => {
     const wrapper = mount(VBtn)
 
@@ -99,5 +97,23 @@ test('VBtn.js', () => {
 
     expect(wrapper.is('a')).toBe(true)
     expect(wrapper.html()).toMatchSnapshot()
+  })
+
+  it('should register and unregister', () => {
+    const register = jest.fn()
+    const unregister = jest.fn()
+
+    const wrapper = mount(VBtn, {
+      provide: {
+        buttonGroup: {
+          register: register,
+          unregister: unregister
+        }
+      }
+    })
+
+    expect(register).toHaveBeenCalled()
+    wrapper.destroy()
+    expect(unregister).toHaveBeenCalled()
   })
 })

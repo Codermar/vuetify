@@ -1,11 +1,9 @@
 import Vue from 'vue'
-import { compileToFunctions } from 'vue-template-compiler'
 import { test } from '~util/testing'
-import { mount } from 'avoriaz'
 import VDataIterator from './VDataIterator'
 import VBtn from '~components/VBtn'
 
-test('VDataIterator.js', () => {
+test('VDataIterator.js', ({ mount, compileToFunctions }) => {
   function dataIteratorTestData () {
     return {
       propsData: {
@@ -34,7 +32,7 @@ test('VDataIterator.js', () => {
     const content = wrapper.find('.data-iterator div div')[0]
     expect(content.element.textContent).toBe('No matching records found')
 
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should match a snapshot - hideActions and no footer slot', () => {
@@ -53,7 +51,7 @@ test('VDataIterator.js', () => {
     const wrapper = mount(VDataIterator, data)
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should match a snapshot - no data', () => {
@@ -66,7 +64,7 @@ test('VDataIterator.js', () => {
     const content = wrapper.find('.data-iterator div div')[0]
     expect(content.element.textContent).toBe('No data available')
 
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should match a snapshot - with data', () => {
@@ -95,7 +93,7 @@ test('VDataIterator.js', () => {
     const wrapper = mount(component)
 
     expect(wrapper.html()).toMatchSnapshot()
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should pass attrs, class and props to content', () => {
@@ -136,7 +134,7 @@ test('VDataIterator.js', () => {
     expect(button.hasClass('btn--block')).toBe(true)
     expect(button.hasClass('test__class')).toBe(true)
 
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 
   it('should not filter items if search is empty', async () => {
@@ -146,6 +144,6 @@ test('VDataIterator.js', () => {
 
     expect(wrapper.instance().filteredItems).toHaveLength(data.propsData.items.length)
 
-    expect('Application is missing <v-app> component.').toHaveBeenTipped()
+    expect('Unable to locate target [data-app]').toHaveBeenTipped()
   })
 })
