@@ -1,4 +1,4 @@
-require('../../stylus/components/_sliders.styl')
+import '../../stylus/components/_sliders.styl'
 
 import { addOnceEventListener, createRange } from '../../util/helpers'
 
@@ -9,14 +9,14 @@ import ClickOutside from '../../directives/click-outside'
 
 import { VScaleTransition } from '../transitions'
 
+import { consoleWarn } from '../../util/console'
+
 export default {
   name: 'v-slider',
 
   mixins: [Colorable, Input],
 
   directives: { ClickOutside },
-
-  components: { VScaleTransition },
 
   data () {
     return {
@@ -154,7 +154,7 @@ export default {
 
     // Without a v-app, iOS does not work with body selectors
     this.app = document.querySelector('[data-app]') ||
-      console.warn('The v-slider component requires the presence of v-app or a non-body wrapping element with the [data-app] attribute.')
+      consoleWarn('Missing v-app or a non-body wrapping element with the [data-app] attribute', this)
   },
 
   methods: {
@@ -225,7 +225,7 @@ export default {
       }
     },
     genThumbLabel (h) {
-      return h('v-scale-transition', {
+      return h(VScaleTransition, {
         props: { origin: 'bottom center' }
       }, [
         h('div', {
@@ -239,7 +239,7 @@ export default {
         }, [
           h('div', {
             staticClass: 'slider__thumb--label',
-            'class': this.addBackgroundColorClassChecks({}, 'computedThumbColor')
+            'class': this.addBackgroundColorClassChecks({}, this.computedThumbColor)
           }, [
             h('span', {}, this.inputValue)
           ])
@@ -261,7 +261,7 @@ export default {
       const children = []
       children.push(h('div', {
         staticClass: 'slider__thumb',
-        'class': this.addBackgroundColorClassChecks({}, 'computedThumbColor')
+        'class': this.addBackgroundColorClassChecks({}, this.computedThumbColor)
       }))
 
       this.thumbLabel && children.push(this.genThumbLabel(h))
@@ -280,7 +280,7 @@ export default {
       }, children)
     },
     genSteps (h) {
-      const ticks = createRange(this.numTicks + 1).map((i) => {
+      const ticks = createRange(this.numTicks + 1).map(i => {
         const span = h('span', {
           key: i,
           staticClass: 'slider__tick',
@@ -301,7 +301,7 @@ export default {
       const children = [
         h('div', {
           staticClass: 'slider__track',
-          'class': this.addBackgroundColorClassChecks({}, 'computedTrackColor'),
+          'class': this.addBackgroundColorClassChecks({}, this.computedTrackColor),
           style: this.trackStyles
         }),
         h('div', {
@@ -340,7 +340,8 @@ export default {
         keyup: this.onKeyUp
       }, this.$listeners),
       directives: [{
-        name: 'click-outside'
+        name: 'click-outside',
+        value: () => (this.isActive = false)
       }]
     })
   }

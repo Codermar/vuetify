@@ -1,5 +1,5 @@
 // Styles
-require('../../stylus/components/_toolbar.styl')
+import '../../stylus/components/_toolbar.styl'
 
 // Mixins
 import Applicationable from '../../mixins/applicationable'
@@ -18,7 +18,8 @@ export default {
       'clippedLeft',
       'clippedRight',
       'computedHeight',
-      'invertedScroll'
+      'invertedScroll',
+      'manualScroll'
     ]),
     Colorable,
     SSRBootable,
@@ -65,6 +66,7 @@ export default {
     manualScroll: Boolean,
     prominent: Boolean,
     scrollOffScreen: Boolean,
+    scrollToolbarOffScreen: Boolean,
     scrollTarget: String,
     scrollThreshold: {
       type: Number,
@@ -89,6 +91,7 @@ export default {
       return this.heights.mobile
     },
     computedExtensionHeight () {
+      if (this.tabs) return 48
       if (this.extensionHeight) return parseInt(this.extensionHeight)
 
       return this.computedContentHeight
@@ -106,7 +109,10 @@ export default {
     classes () {
       return this.addBackgroundColorClassChecks({
         'toolbar': true,
-        'elevation-0': this.flat || (!this.isActive && !this.tabs),
+        'elevation-0': this.flat || (!this.isActive &&
+          !this.tabs &&
+          !this.scrollToolbarOffScreen
+        ),
         'toolbar--absolute': this.absolute,
         'toolbar--card': this.card,
         'toolbar--clipped': this.clippedLeft || this.clippedRight,
@@ -131,7 +137,9 @@ export default {
     },
     computedTransform () {
       return !this.isActive
-        ? -this.computedHeight
+        ? this.scrollToolbarOffScreen
+          ? -this.computedContentHeight
+          : -this.computedHeight
         : 0
     },
     currentThreshold () {
@@ -188,7 +196,8 @@ export default {
 
   methods: {
     onScroll () {
-      if (!this.scrollOffScreen ||
+      if ((!this.scrollOffScreen &&
+        !this.scrollToolbarOffScreen) ||
         this.manualScroll ||
         typeof window === 'undefined'
       ) return
@@ -209,7 +218,7 @@ export default {
      * @return {number}
      */
     updateApplication () {
-      return this.invertedScroll
+      return this.invertedScroll || this.manualScroll
         ? 0
         : this.computedHeight
     }

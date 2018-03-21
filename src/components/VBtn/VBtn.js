@@ -1,5 +1,10 @@
-require('../../stylus/components/_buttons.styl')
+// Styles
+import '../../stylus/components/_buttons.styl'
 
+// Components
+import VProgressCircular from '../VProgressCircular'
+
+// Mixins
 import Colorable from '../../mixins/colorable'
 import Positionable from '../../mixins/positionable'
 import Routable from '../../mixins/routable'
@@ -51,12 +56,9 @@ export default {
 
   computed: {
     classes () {
-      const colorBackground = !this.outline && !this.flat
-      const colorText = !this.disabled && !colorBackground
-
       const classes = {
         'btn': true,
-        'btn--active': this.isActive,
+        [this.activeClass]: this.isActive,
         'btn--absolute': this.absolute,
         'btn--block': this.block,
         'btn--bottom': this.bottom,
@@ -70,7 +72,7 @@ export default {
         'btn--left': this.left,
         'btn--loader': this.loading,
         'btn--outline': this.outline,
-        'btn--depressed': this.depressed && !this.flat || this.outline,
+        'btn--depressed': (this.depressed && !this.flat) || this.outline,
         'btn--right': this.right,
         'btn--round': this.round,
         'btn--router': this.to,
@@ -79,24 +81,7 @@ export default {
         ...this.themeClasses
       }
 
-      if (!this.color) {
-        return Object.assign(classes, {
-          'primary': this.primary && colorBackground,
-          'secondary': this.secondary && colorBackground,
-          'success': this.success && colorBackground,
-          'info': this.info && colorBackground,
-          'warning': this.warning && colorBackground,
-          'error': this.error && colorBackground,
-          'primary--text': this.primary && colorText,
-          'secondary--text': this.secondary && colorText,
-          'success--text': this.success && colorText,
-          'info--text': this.info && colorText,
-          'warning--text': this.warning && colorText,
-          'error--text': this.error && colorText
-        })
-      }
-
-      return colorBackground
+      return (!this.outline && !this.flat)
         ? this.addBackgroundColorClassChecks(classes)
         : this.addTextColorClassChecks(classes)
     }
@@ -122,7 +107,7 @@ export default {
       const children = []
 
       if (!this.$slots.loader) {
-        children.push(this.$createElement('v-progress-circular', {
+        children.push(this.$createElement(VProgressCircular, {
           props: {
             indeterminate: true,
             size: 26
