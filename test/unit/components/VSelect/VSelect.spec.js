@@ -13,7 +13,7 @@ test('VSelect', ({ mount, compileToFunctions }) => {
   app.setAttribute('data-app', true)
   document.body.appendChild(app)
 
-  it('should return numeric 0', () => {
+  it('should return numeric 0', async () => {
     const item = { value: 0, text: '0' }
     const wrapper = mount(VSelect, {
       propsData: {
@@ -26,6 +26,8 @@ test('VSelect', ({ mount, compileToFunctions }) => {
     const change = jest.fn()
     wrapper.vm.$on('change', change)
     wrapper.vm.selectItem(item)
+
+    await wrapper.vm.$nextTick()
 
     expect(change).toBeCalledWith([0])
   })
@@ -396,26 +398,20 @@ test('VSelect', ({ mount, compileToFunctions }) => {
     expect(list.html()).toMatchSnapshot()
   })
 
-  it('should assign self as activator when solo or box', () => {
-    const wrapper = mount(VSelect, {
-      propsData: { solo: true }
-    })
-
-    wrapper.trigger('click')
-
-    expect(wrapper.vm.$refs.menu.activator).toEqual(wrapper.vm.$el)
-  })
-
   it('should use scoped slot for selection generation', () => {
-    const wrapper = mount(VSelect, {
-      propsData: {
-        items: ['foo', 'bar'],
-        value: 'foo'
-      },
-      scopedSlots: {
-        selection: () => {
-          render: h => h('div', 'bar')
-        }
+    const wrapper = mount({
+      render (h) {
+        return h(VSelect, {
+          attrs: {
+            items: ['foo', 'bar'],
+            value: 'foo'
+          },
+          scopedSlots: {
+            selection: ({ item }) => {
+              return h('div', item + ' - from slot')
+            }
+          }
+        })
       }
     })
 
@@ -424,7 +420,10 @@ test('VSelect', ({ mount, compileToFunctions }) => {
 
   it('should toggle menu on icon click', async () => {
     const wrapper = mount(VSelect, {
-      propsData: { offsetY: true }
+      propsData: {
+        items: ['foo', 'bar'],
+        offsetY: true
+      }
     })
 
     const icon = wrapper.first('.v-icon')
@@ -443,7 +442,7 @@ test('VSelect', ({ mount, compileToFunctions }) => {
     const event = new Event('mouseup')
     Object.defineProperty(event, 'target', { writable: false, value: icon.element })
 
-    wrapper.element.dispatchEvent(event)
+    slot.element.dispatchEvent(event)
 
     await wrapper.vm.$nextTick()
     expect(wrapper.vm.isMenuActive).toBe(false)

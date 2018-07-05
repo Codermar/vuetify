@@ -20,7 +20,14 @@ test('VOverflowBtn', ({ mount }) => {
       }
     })
 
-    wrapper.vm.internalValue = items[1]
+    // The error only happens
+    // when generating the button
+    // which only happens when
+    // we have a matching model
+    wrapper.setProps({
+      items: [items[1]],
+      value: 'Hello'
+    })
 
     await wrapper.vm.$nextTick()
 
@@ -71,24 +78,5 @@ test('VOverflowBtn', ({ mount }) => {
     btn.trigger('click')
 
     expect(callback).toBeCalled()
-  })
-
-  it('should call correct method on update self', async () => {
-    const updateCombobox = jest.fn()
-    const wrapper = mount(VOverflowBtn, {
-      methods: { updateCombobox }
-    })
-
-    wrapper.vm.updateSelf()
-
-    expect(updateCombobox).not.toBeCalled()
-
-    wrapper.setProps({ editable: true })
-
-    await wrapper.vm.$nextTick()
-
-    wrapper.vm.updateSelf()
-
-    expect(updateCombobox).toBeCalled()
   })
 })

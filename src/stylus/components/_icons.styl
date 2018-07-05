@@ -5,7 +5,7 @@
 v-icon($material)
   color: $material.icons.active
 
-  &.v-icon--disabled:not(.input-group__append-icon)
+  &.v-icon--disabled
     color: $material.icons.inactive !important
 
 theme(v-icon, "v-icon")
@@ -18,9 +18,9 @@ theme(v-icon, "v-icon")
   justify-content: center
   line-height: 1
   transition: $primary-transition
-  vertical-align: middle
+  vertical-align: text-bottom
 
-  &--link
+  &.v-icon.v-icon--link
     cursor: pointer
 
   &.v-icon--large

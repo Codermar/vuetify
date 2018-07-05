@@ -31,6 +31,7 @@ const dimensions = {
  * Can calculate X and Y axis overflows
  * As well as be manually positioned
  */
+/* @vue/component */
 export default {
   name: 'menuable',
 
@@ -39,16 +40,6 @@ export default {
     Stackable,
     Themeable
   ],
-
-  data: () => ({
-    absoluteX: 0,
-    absoluteY: 0,
-    dimensions: Object.assign({}, dimensions),
-    isContentActive: false,
-    pageYOffset: 0,
-    stackClass: 'menuable__content__active',
-    stackMinZIndex: 6
-  }),
 
   props: {
     activator: {
@@ -98,6 +89,16 @@ export default {
       default: null
     }
   },
+
+  data: () => ({
+    absoluteX: 0,
+    absoluteY: 0,
+    dimensions: Object.assign({}, dimensions),
+    isContentActive: false,
+    pageYOffset: 0,
+    stackClass: 'v-menu__content--active',
+    stackMinZIndex: 6
+  }),
 
   computed: {
     computedLeft () {
@@ -209,7 +210,12 @@ export default {
 
       // If overflowing bottom and offset
       // TODO: set 'bottom' position instead of 'top'
-      if (isOverflowing && this.offsetOverflow) {
+      if (isOverflowing &&
+        this.offsetOverflow &&
+        // If we don't have enough room to offset
+        // the overflow, don't offset
+        activator.top > contentHeight
+      ) {
         top = this.pageYOffset + (activator.top - contentHeight)
       // If overflowing bottom
       } else if (isOverflowing && !this.allowOverflow) {

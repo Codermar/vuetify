@@ -72,21 +72,18 @@ exports[`VDataTable.vue should match a snapshot - no data 1`] = `
              class="v-input v-text-field v-select v-input--hide-details"
         >
           <div class="v-input__control">
-            <div class="v-input__slot primary--text">
+            <div class="v-input__slot">
               <div class="v-menu"
                    style="display: inline-block;"
               >
                 <div class="v-menu__activator">
                   <div class="v-select__slot">
-                    <label aria-hidden="true"
-                           class="v-label"
-                           style="left: 0px; position: absolute;"
-                    >
-                    </label>
                     <div class="v-select__selections">
-                      <input tabindex="0"
+                      <input readonly="readonly"
+                             tabindex="0"
                              type="text"
                              autocomplete="on"
+                             aria-readonly="false"
                       >
                     </div>
                     <div class="v-input__append-inner">
@@ -100,12 +97,10 @@ exports[`VDataTable.vue should match a snapshot - no data 1`] = `
                     </div>
                   </div>
                 </div>
-                <div class="v-menu__content"
+                <div class="v-menu__content v-menu__content--auto"
                      style="max-height: 200px; min-width: 75px; max-width: auto; top: 12px; left: 12px; z-index: 0; display: none;"
                 >
-                  <div class="v-select-list v-card"
-                       style="height: auto;"
-                  >
+                  <div class="v-select-list v-card">
                     <div class="v-list">
                       <div>
                         <a class="v-list__tile v-list__tile--link">
@@ -262,21 +257,18 @@ exports[`VDataTable.vue should match a snapshot - no matching results 1`] = `
              class="v-input v-text-field v-select v-input--hide-details"
         >
           <div class="v-input__control">
-            <div class="v-input__slot primary--text">
+            <div class="v-input__slot">
               <div class="v-menu"
                    style="display: inline-block;"
               >
                 <div class="v-menu__activator">
                   <div class="v-select__slot">
-                    <label aria-hidden="true"
-                           class="v-label"
-                           style="left: 0px; position: absolute;"
-                    >
-                    </label>
                     <div class="v-select__selections">
-                      <input tabindex="0"
+                      <input readonly="readonly"
+                             tabindex="0"
                              type="text"
                              autocomplete="on"
+                             aria-readonly="false"
                       >
                     </div>
                     <div class="v-input__append-inner">
@@ -290,12 +282,10 @@ exports[`VDataTable.vue should match a snapshot - no matching results 1`] = `
                     </div>
                   </div>
                 </div>
-                <div class="v-menu__content"
+                <div class="v-menu__content v-menu__content--auto"
                      style="max-height: 200px; min-width: 75px; max-width: auto; top: 12px; left: 12px; z-index: 0; display: none;"
                 >
-                  <div class="v-select-list v-card"
-                       style="height: auto;"
-                  >
+                  <div class="v-select-list v-card">
                     <div class="v-list">
                       <div>
                         <a class="v-list__tile v-list__tile--link">
@@ -454,21 +444,18 @@ exports[`VDataTable.vue should match a snapshot - with data 1`] = `
              class="v-input v-text-field v-select v-input--hide-details"
         >
           <div class="v-input__control">
-            <div class="v-input__slot primary--text">
+            <div class="v-input__slot">
               <div class="v-menu"
                    style="display: inline-block;"
               >
                 <div class="v-menu__activator">
                   <div class="v-select__slot">
-                    <label aria-hidden="true"
-                           class="v-label"
-                           style="left: 0px; position: absolute;"
-                    >
-                    </label>
                     <div class="v-select__selections">
-                      <input tabindex="0"
+                      <input readonly="readonly"
+                             tabindex="0"
                              type="text"
                              autocomplete="on"
+                             aria-readonly="false"
                       >
                     </div>
                     <div class="v-input__append-inner">
@@ -482,12 +469,10 @@ exports[`VDataTable.vue should match a snapshot - with data 1`] = `
                     </div>
                   </div>
                 </div>
-                <div class="v-menu__content"
+                <div class="v-menu__content v-menu__content--auto"
                      style="max-height: 200px; min-width: 75px; max-width: auto; top: 12px; left: 12px; z-index: 0; display: none;"
                 >
-                  <div class="v-select-list v-card"
-                       style="height: auto;"
-                  >
+                  <div class="v-select-list v-card">
                     <div class="v-list">
                       <div>
                         <a class="v-list__tile v-list__tile--link">

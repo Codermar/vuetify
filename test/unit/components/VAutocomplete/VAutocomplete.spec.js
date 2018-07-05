@@ -1,7 +1,7 @@
 import { test } from '@/test'
 import VAutocomplete from '@/components/VAutocomplete'
 
-test('VAutocomplete.js', ({ mount, shallow }) => {
+test('VAutocomplete.js', ({ mount, shallow, compileToFunctions }) => {
   const app = document.createElement('div')
   app.setAttribute('data-app', true)
   document.body.appendChild(app)
@@ -102,6 +102,8 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
       }
     })
 
+    await wrapper.vm.$nextTick()
+
     const input = wrapper.first('input')
 
     input.trigger('focus')
@@ -112,15 +114,19 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
 
     wrapper.setProps({
       multiple: false,
-      value: 2
+      value: 1
     })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.internalSearch).toBe(1)
 
     input.trigger('focus')
     input.element.value = 3
     input.trigger('input')
     input.trigger('blur')
 
-    expect(wrapper.vm.internalSearch).toBe(null)
+    expect(wrapper.vm.internalSearch).toBe('3')
   })
 
   it('should render role=combobox correctly when autocomplete', async () => {
@@ -198,6 +204,8 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
       }
     })
 
+    await wrapper.vm.$nextTick()
+
     wrapper.setProps({ searchInput: 'asdf' })
 
     // Wait for watcher
@@ -218,7 +226,9 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
 
     const input = wrapper.first('input')
     input.trigger('focus')
+
     await wrapper.vm.$nextTick()
+
     expect(wrapper.vm.isMenuActive).toBe(false)
 
     wrapper.setProps({
@@ -228,49 +238,13 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
       ]
     })
 
-    input.trigger('blur')
     await wrapper.vm.$nextTick()
 
-    input.trigger('focus')
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.isMenuActive).toBe(false)
+    // Once items refresh active will
+    // be updated to openif already
+    // focused
+    expect(wrapper.vm.isMenuActive).toBe(true)
   })
-
-  it('should emit custom value on blur', async () => {
-    const wrapper = shallow(VAutocomplete, {
-      propsData: { combobox: true }
-    })
-
-    const input = wrapper.first('input')
-
-    const change = jest.fn()
-    wrapper.vm.$on('change', change)
-
-    input.trigger('focus')
-    await wrapper.vm.$nextTick()
-
-    input.element.value = 'foo'
-    input.trigger('input')
-
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.vm.isMenuActive).toBe(false)
-
-    input.trigger('blur')
-    expect(change).toHaveBeenCalledWith('foo')
-
-    input.trigger('keydown.esc')
-    expect(wrapper.vm.isMenuActive).toBe(false)
-
-    input.element.value = ''
-    input.trigger('input')
-
-    await wrapper.vm.$nextTick()
-    expect(wrapper.vm.isMenuActive).toBe(false)
-  })
-
-
 
   it('should change selected index', async () => {
     const wrapper = shallow(VAutocomplete, {
@@ -409,18 +383,6 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
     expect(wrapper.vm.isMenuActive).toBe(false)
     expect(wrapper.vm.menuCanShow).toBe(true)
 
-    // Should not show menu
-    wrapper.setProps({
-      combobox: true,
-      searchInput: 'foobar'
-    })
-
-    expect(wrapper.vm.menuCanShow).toBe(false)
-
-    slot.trigger('click')
-
-    expect(wrapper.vm.isMenuActive).toBe(false)
-
     // TODO: Add expects for tags when impl
   })
 
@@ -461,38 +423,6 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.lazySearch).toBe(null)
-  })
-
-  it('should call methods on blur', () => {
-    const updateTags = jest.fn()
-    const updateCombobox = jest.fn()
-    const updateAutocomplete = jest.fn()
-    const wrapper = shallow(VAutocomplete, {
-      methods: {
-        updateAutocomplete,
-        updateCombobox,
-        updateTags
-      }
-    })
-
-    wrapper.vm.onEnterDown()
-
-    expect(updateAutocomplete).toHaveBeenCalledTimes(1)
-
-    wrapper.setProps({ combobox: true })
-
-    wrapper.vm.onEnterDown()
-
-    expect(updateCombobox).toHaveBeenCalledTimes(1)
-
-    wrapper.setProps({
-      combobox: false,
-      tags: true
-    })
-
-    wrapper.vm.onEnterDown()
-
-    expect(updateTags).toHaveBeenCalledTimes(1)
   })
 
   it('should select input text on focus', async () => {
@@ -539,63 +469,6 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
     slot.trigger('click')
 
     expect(onFocus).toBeCalled()
-  })
-
-  it('should react to tabs', async () => {
-    const selectListTile = jest.fn()
-    const updateTags = jest.fn()
-    const wrapper = mount(VAutocomplete, {
-      propsData: {
-        items: ['fizz', 'buzz'],
-        tags: true
-      },
-      methods: {
-        selectListTile,
-        updateTags
-      }
-    })
-
-    const input = wrapper.first('input')
-    const menu = wrapper.first('.v-menu')
-    const tile = wrapper.first('.v-list__tile')
-
-    input.trigger('focus')
-    input.element.value = 'foo'
-    input.trigger('input')
-    input.trigger('keydown.tab')
-
-    expect(wrapper.vm.getMenuIndex()).toBe(-1)
-    expect(updateTags).toBeCalled()
-
-    wrapper.setProps({ tags: false })
-
-    input.element.value = 'fizz'
-    input.trigger('input')
-    menu.trigger('keydown.down')
-
-    expect(wrapper.vm.getMenuIndex()).toBe(1)
-
-    expect(selectListTile).not.toBeCalled()
-
-    input.trigger('keydown.tab')
-
-    expect(selectListTile).toBeCalled()
-  })
-
-  it('should select list tile', () => {
-    const wrapper = mount(VAutocomplete)
-    const click = jest.fn()
-
-    // Would normally be filled with actual tiles
-    wrapper.vm.$refs.menu.tiles = [{ click }]
-
-    wrapper.vm.selectListTile(2)
-
-    expect(click).not.toBeCalled()
-
-    wrapper.vm.selectListTile(0)
-
-    expect(click).toBeCalled()
   })
 
   it('should react to keydown', () => {
@@ -734,5 +607,139 @@ test('VAutocomplete.js', ({ mount, shallow }) => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.menuCanShow).toBe(true)
+
+    // If we are hiding selected
+    // filtered will have a positive length
+    // but the hidden items will not show
+    // check to make sure when all values are
+    // selected to close the menu
+    wrapper.setProps({
+      hideNoData: true,
+      hideSelected: true,
+      items: [1,2,3,4],
+      multiple: true,
+      value: [1,2,3]
+    })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.menuCanShow).toBe(true)
+
+    wrapper.setProps({ value: [1,2,3,4] })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.menuCanShow).toBe(false)
+  })
+
+  it('should not hide menu when no data but has no-data slot', async () => {
+    const wrapper = mount(VAutocomplete, {
+      propsData: {
+        combobox: true
+      },
+      slots: {
+        'no-data': [compileToFunctions('<span>show me</span>')]
+      }
+    })
+
+    const input = wrapper.first('input')
+    input.trigger('focus')
+    await wrapper.vm.$nextTick()
+    expect(wrapper.vm.menuCanShow).toBe(true)
+  })
+
+  // https://github.com/vuetifyjs/vuetify/issues/2834
+  it('should not update search if selectedIndex is > -1', () => {
+    const wrapper = mount(VAutocomplete)
+
+    const input = wrapper.first('input')
+
+    input.trigger('focus')
+    input.element.value = 'foo'
+    input.trigger('input')
+
+    expect(wrapper.vm.internalSearch).toBe('foo')
+
+    wrapper.setData({
+      lazySearch: '',
+      selectedIndex: 0
+    })
+
+    expect(wrapper.vm.internalSearch).toBe('')
+
+    input.element.value = 'bar'
+    input.trigger('input')
+
+    expect(wrapper.vm.internalSearch).toBe('')
+  })
+
+  it('should clear search input on clear callback', async () => {
+    const wrapper = mount(VAutocomplete, {
+      propsData: {
+        clearable: true
+      }
+    })
+
+    const icon = wrapper.first('.v-input__append-inner .v-icon')
+    const input = wrapper.first('input')
+
+    input.element.value = 'foobar'
+    input.trigger('input')
+
+    expect(wrapper.vm.internalSearch).toBe('foobar')
+
+    icon.trigger('click')
+
+    expect(wrapper.vm.internalSearch).toBe(null)
+  })
+
+  it('should propagate content class', () => {
+    const wrapper = mount(VAutocomplete, {
+      propsData: { contentClass: 'foobar' }
+    })
+
+    const content = wrapper.first('.v-autocomplete__content')
+
+    expect(content.element.classList.contains('foobar')).toBe(true)
+  })
+
+  it('should update the displayed value when items changes', async () => {
+    const wrapper = mount(VAutocomplete, {
+      propsData: {
+        value: 1,
+        items: []
+      }
+    })
+
+    const input = wrapper.first('input')
+
+    await wrapper.vm.$nextTick()
+    wrapper.setProps({ items: [{ text: 'foo', value: 1 }] })
+    await wrapper.vm.$nextTick()
+    expect(input.element.value).toBe('foo')
+  })
+
+  it('should show menu when items are added and hide-no-data', async () => {
+    const wrapper = mount(VAutocomplete, {
+      propsData: {
+        hideNoData: true,
+        items: []
+      }
+    })
+
+    const input = wrapper.first('input')
+
+    input.trigger('focus')
+
+    expect(wrapper.vm.isMenuActive).toBe(false)
+    expect(wrapper.vm.isFocused).toBe(true)
+
+    wrapper.setProps({
+      items: ['Foo', 'Bar']
+    })
+
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isMenuActive).toBe(true)
   })
 })

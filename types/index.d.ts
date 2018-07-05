@@ -1,4 +1,5 @@
 import Vue, { PluginFunction, PluginObject, VueConstructor, DirectiveFunction, DirectiveOptions } from 'vue'
+import { VuetifyLanguage } from './lang'
 import './alacarte'
 
 declare const Vuetify: Vuetify
@@ -8,10 +9,12 @@ export interface Vuetify {
   version: string
 }
 
+export type VuetifyDirective = DirectiveOptions & { name: string }
+
 export interface VuetifyUseOptions {
-  transitions?: VueConstructor
-  directives?: DirectiveOptions | DirectiveFunction
-  components?: PluginObject<any> | PluginFunction<any>
+  transitions?: Record<string, VueConstructor>
+  directives?: Record<string, VuetifyDirective>
+  components?: Record<string, PluginObject<any> | PluginFunction<never>>
   /** @see https://vuetifyjs.com/style/theme */
   theme?: Partial<VuetifyTheme> | false
   /**
@@ -31,21 +34,27 @@ export interface VuetifyUseOptions {
   icons?: Partial<VuetifyIcons>
   /** @see https://vuetifyjs.com/style/theme#options */
   options?: Partial<VuetifyOptions>
+  lang?: Partial<VuetifyLanguage>
+  rtl?: boolean
 }
 
 export interface VuetifyObject extends Vue {
-  readonly breakpoint: VuetifyBreakpoint
+  readonly breakpoint: Readonly<VuetifyBreakpoint>
   readonly dark: boolean
+  readonly goTo: <T extends string | number | HTMLElement | Vue>(target: T, options?: VuetifyGoToOptions) => Promise<T>
+  readonly t: VuetifyLanguage['t']
   application: VuetifyApplication
-  theme: VuetifyTheme | false
+  theme: VuetifyTheme
   icons: VuetifyIcons
+  lang: VuetifyLanguage
   options: VuetifyOptions
-  goTo: <T extends string | number | HTMLElement | Vue>(target: T, options?: VuetifyGoToOptions) => Promise<T>
+  rtl: boolean
 }
 
 declare module 'vue/types/vue' {
   export interface Vue {
     $vuetify: VuetifyObject
+    _uid: string
   }
 }
 
@@ -68,6 +77,7 @@ export interface VuetifyIcons {
   delimiter: string
   sort: string
   expand: string
+  menu: string
   subgroup: string
   dropdown: string
   radioOn: string
