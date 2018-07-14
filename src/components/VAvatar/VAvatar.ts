@@ -4,15 +4,20 @@ import '../../stylus/components/_avatars.styl'
 import Colorable from '../../mixins/colorable'
 import { convertToUnit } from '../../util/helpers'
 
+// Types
+import { CreateElement, VNode } from 'vue'
+import mixins from '../../util/mixins'
+
 /* @vue/component */
-export default {
+export default mixins(Colorable).extend({
   name: 'v-avatar',
 
   functional: true,
 
-  mixins: [Colorable],
-
   props: {
+    // TODO: inherit these
+    color: String,
+
     size: {
       type: [Number, String],
       default: 48
@@ -20,15 +25,17 @@ export default {
     tile: Boolean
   },
 
-  render (h, { data, props, children }) {
+  render (h: CreateElement, { data, props, children }): VNode {
     data.staticClass = (`v-avatar ${data.staticClass || ''}`).trim()
-    data.style = data.style || {}
 
     if (props.tile) data.staticClass += ' v-avatar--tile'
 
     const size = convertToUnit(props.size)
-    data.style.height = size
-    data.style.width = size
+    data.style = {
+      height: size,
+      width: size,
+      ...data.style
+    }
     data.class = [
       data.class,
       Colorable.options.methods.addBackgroundColorClassChecks.call(props, {}, props.color)
@@ -36,4 +43,4 @@ export default {
 
     return h('div', data, children)
   }
-}
+})

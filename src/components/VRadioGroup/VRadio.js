@@ -106,9 +106,11 @@ export default {
           'aria-label': this.label,
           name: this.radio.name || false,
           role: type,
-          type,
-          checked: this.isActive
+          type
         }),
+        domProps: {
+          checked: this.isActive
+        },
         on: {
           blur: this.onBlur,
           change: this.onChange,
@@ -131,7 +133,9 @@ export default {
         },
         props: {
           color: this.radio.validationState || false,
-          focused: this.hasState
+          dark: this.dark,
+          focused: this.hasState,
+          light: this.light
         }
       }, this.$slots.label || this.label)
     },
@@ -147,7 +151,11 @@ export default {
           'class': this.classesSelectable
         }),
         this.$createElement(VIcon, {
-          'class': this.classesSelectable
+          'class': this.classesSelectable,
+          props: {
+            dark: this.dark,
+            light: this.light
+          }
         }, this.computedIcon)
       ])
     },
