@@ -32,6 +32,7 @@ export default {
     },
     min: String,
     max: String,
+    readonly: Boolean,
     scrollable: Boolean,
     value: null
   },
@@ -170,6 +171,7 @@ export default {
           light: this.light,
           max: this.selectingHour ? (this.isAmPm && this.period === 'am' ? 11 : 23) : 59,
           min: this.selectingHour && this.isAmPm && this.period === 'pm' ? 12 : 0,
+          readonly: this.readonly,
           scrollable: this.scrollable,
           size: this.width - ((!this.fullWidth && this.landscape) ? 80 : 20),
           step: this.selectingHour ? 1 : 5,
@@ -185,10 +187,6 @@ export default {
     genPickerBody () {
       return this.$createElement('div', {
         staticClass: 'v-time-picker-clock__container',
-        style: {
-          width: `${this.width}px`,
-          height: `${this.width - ((!this.fullWidth && this.landscape) ? 60 : 0)}px`
-        },
         key: this.selectingHour
       }, [this.genClock()])
     },
@@ -199,6 +197,7 @@ export default {
           hour: this.inputHour,
           minute: this.inputMinute,
           period: this.period,
+          readonly: this.readonly,
           selectingHour: this.selectingHour
         },
         on: {

@@ -2,11 +2,18 @@
 import '../../stylus/components/_autocompletes.styl'
 
 // Extensions
-import VSelect from '../VSelect/VSelect'
+import VSelect, { defaultMenuProps as VSelectMenuProps } from '../VSelect/VSelect'
 import VTextField from '../VTextField/VTextField'
 
 // Utils
 import { keyCodes } from '../../util/helpers'
+
+const defaultMenuProps = {
+  ...VSelectMenuProps,
+  offsetY: true,
+  offsetOverflow: true,
+  transition: false
+}
 
 /* @vue/component */
 export default {
@@ -38,29 +45,18 @@ export default {
     },
     hideNoData: Boolean,
     noFilter: Boolean,
-    offsetY: {
-      type: Boolean,
-      default: true
-    },
-    offsetOverflow: {
-      type: Boolean,
-      default: true
-    },
     searchInput: {
       default: undefined
     },
-    transition: {
-      type: [Boolean, String],
-      default: false
+    menuProps: {
+      type: VSelect.props.menuProps.type,
+      default: () => defaultMenuProps
     }
   },
 
   data: vm => ({
     attrsInput: null,
-    lazySearch: vm.searchInput,
-    lazyValue: vm.value != null
-      ? vm.value
-      : vm.multiple ? [] : undefined
+    lazySearch: vm.searchInput
   }),
 
   computed: {
@@ -122,11 +118,13 @@ export default {
 
       return (this.displayedItemsCount > 0) || !this.hideNoData
     },
-    menuProps () {
-      return Object.assign(VSelect.computed.menuProps.call(this), {
-        contentClass: (`v-autocomplete__content ${this.contentClass || ''}`).trim(),
-        value: this.menuCanShow && this.isMenuActive
-      })
+    $_menuProps () {
+      const props = VSelect.computed.$_menuProps.call(this)
+      props.contentClass = `v-autocomplete__content ${props.contentClass || ''}`.trim()
+      return {
+        ...defaultMenuProps,
+        ...props
+      }
     },
     searchIsDirty () {
       return this.internalSearch != null &&
@@ -210,11 +208,6 @@ export default {
     onInternalSearchChanged (val) {
       this.updateMenuDimensions()
     },
-    activateMenu () {
-      if (this.menuCanShow) {
-        this.isMenuActive = true
-      }
-    },
     updateMenuDimensions () {
       if (this.isMenuActive &&
         this.$refs.menu
@@ -273,7 +266,7 @@ export default {
       }
     },
     clearableCallback () {
-      this.internalSearch = null
+      this.internalSearch = undefined
 
       VSelect.methods.clearableCallback.call(this)
     },
@@ -338,17 +331,11 @@ export default {
       this.setSearch()
     },
     setSelectedItems () {
-      if (this.internalValue == null ||
-        this.internalValue === ''
-      ) {
-        this.selectedItems = []
-      } else {
-        VSelect.methods.setSelectedItems.call(this)
+      VSelect.methods.setSelectedItems.call(this)
 
-        // #4273 Don't replace if searching
-        // #4403 Don't replace is focused
-        if (!this.isFocused) this.setSearch()
-      }
+      // #4273 Don't replace if searching
+      // #4403 Don't replace if focused
+      if (!this.isFocused) this.setSearch()
     },
     setSearch () {
       // Wait for nextTick so selectedItem
