@@ -1,8 +1,3 @@
-import Vue from 'vue'
-
-// Components
-import VItemGroup from '../components/VItemGroup/VItemGroup'
-
 // Mixins
 import { inject as RegistrableInject } from './registrable'
 
@@ -10,57 +5,60 @@ import { inject as RegistrableInject } from './registrable'
 import mixins from '../util/mixins'
 import { PropValidator } from 'vue/types/options'
 
-type VItemGroupInstance = InstanceType<typeof VItemGroup>
+export function factory (
+  namespace = 'itemGroup',
+  child?: string,
+  parent?: string
+) {
+  return mixins(
+    RegistrableInject(namespace, child, parent)
+  ).extend({
+    name: 'groupable',
 
-interface options extends Vue {
-  itemGroup: VItemGroupInstance
+    props: {
+      activeClass: {
+        type: String,
+        default (): string | undefined {
+          if (!this[namespace]) return undefined
+
+          return this[namespace].activeClass
+        }
+      } as any as PropValidator<string>,
+      disabled: Boolean
+    },
+
+    data () {
+      return {
+        isActive: false
+      }
+    },
+
+    computed: {
+      groupClasses (): object {
+        if (!this.activeClass) return {}
+
+        return {
+          [this.activeClass]: this.isActive
+        }
+      }
+    },
+
+    created () {
+      this[namespace] && this[namespace].register(this)
+    },
+
+    beforeDestroy () {
+      this[namespace] && this[namespace].unregister(this)
+    },
+
+    methods: {
+      toggle () {
+        this.$emit('change')
+      }
+    }
+  })
 }
 
-export default mixins<options>(
-  RegistrableInject('itemGroup', 'v-item', 'v-item-group')
-  /* @vue/component */
-).extend({
-  name: 'groupable',
+const Groupable = factory()
 
-  props: {
-    activeClass: {
-      type: String,
-      default (): string | undefined {
-        if (!this.itemGroup) return undefined
-
-        return this.itemGroup.activeClass
-      }
-    } as any as PropValidator<string>,
-    disabled: Boolean
-  },
-
-  data () {
-    return {
-      isActive: false
-    }
-  },
-
-  computed: {
-    groupClasses (): object {
-      if (!this.activeClass) return {}
-
-      return {
-        [this.activeClass]: this.isActive
-      }
-    }
-  },
-
-  created () {
-    this.itemGroup && this.itemGroup.register(this)
-  },
-
-  beforeDestroy () {
-    this.itemGroup && this.itemGroup.unregister(this)
-  },
-
-  methods: {
-    toggle () {
-      this.$emit('change')
-    }
-  }
-})
+export default Groupable
