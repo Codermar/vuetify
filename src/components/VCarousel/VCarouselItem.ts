@@ -1,31 +1,14 @@
+// Extensions
+import VWindowItem from '../VWindow/VWindowItem'
+
 // Components
 import { VImg } from '../VImg'
-import VWindowItem from '../VWindow/VWindowItem'
 
 /* @vue/component */
 export default VWindowItem.extend({
   name: 'v-carousel-item',
 
   inheritAttrs: false,
-
-  props: {
-    transition: String,
-    reverseTransition: String
-  },
-
-  computed: {
-    computedTransition (): string {
-      if (this.windowGroup.internalReverse) {
-        return typeof this.transition !== 'undefined'
-          ? this.transition
-          : this.windowGroup.computedTransition
-      } else {
-        return typeof this.reverseTransition !== 'undefined'
-          ? this.reverseTransition
-          : this.windowGroup.computedTransition
-      }
-    }
-  },
 
   methods: {
     genDefaultSlot () {
@@ -43,6 +26,7 @@ export default VWindowItem.extend({
     onBeforeEnter () { /* noop */ },
     onEnter () { /* noop */ },
     onAfterEnter () { /* noop */ },
-    onBeforeLeave () { /* noop */ }
+    onBeforeLeave () { /* noop */ },
+    onEnterCancelled () { /* noop */ }
   }
 })

@@ -1,5 +1,5 @@
 // Mixins
-import Groupable from '../../mixins/groupable'
+import { factory as GroupableFactory } from '../../mixins/groupable'
 import Routable from '../../mixins/routable'
 import Themeable from '../../mixins/themeable'
 
@@ -14,7 +14,7 @@ export default {
     Routable,
     // Must be after routable
     // to overwrite activeClass
-    Groupable,
+    GroupableFactory('tabGroup'),
     Themeable
   ],
 
@@ -27,7 +27,7 @@ export default {
 
   computed: {
     isDark () {
-      return this.itemGroup && this.itemGroup.selfIsDark
+      return this.tabGroup && this.tabGroup.selfIsDark
     },
     classes () {
       return {
@@ -69,7 +69,7 @@ export default {
       // actual link, do not
       // prevent default
       if (this.href &&
-        this.href.indexOf('#') > -1
+        this.href === '#'
       ) e.preventDefault()
 
       this.$emit('click', e)

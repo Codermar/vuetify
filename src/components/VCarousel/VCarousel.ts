@@ -2,34 +2,25 @@
 import '../../stylus/components/_carousel.styl'
 
 // Extensions
-import { VWindow } from '../VWindow'
+import VWindow from '../VWindow/VWindow'
 
 // Components
 import VBtn from '../VBtn'
 import VIcon from '../VIcon'
 
 // Mixins
+// TODO: Move this into core components v2.0
 import ButtonGroup from '../../mixins/button-group'
-import Themeable from '../../mixins/themeable'
-
-// Directives
-import Touch from '../../directives/touch'
 
 // Utilities
-import mixins, { ExtractVue } from '../../util/mixins'
 import { convertToUnit } from '../../util/helpers'
 
 // Types
 import { VNode } from 'vue'
 import { VNodeDirective } from 'vue/types/vnode'
 
-export default VWindow.extend(mixins<ExtractVue<[typeof VWindow]>>(
-  Themeable
-  /* @vue/component */
-).extend({
+export default VWindow.extend({
   name: 'v-carousel',
-
-  directives: { Touch },
 
   props: {
     cycle: {
@@ -67,6 +58,7 @@ export default VWindow.extend(mixins<ExtractVue<[typeof VWindow]>>(
 
   data () {
     return {
+      changedByControls: false,
       internalHeight: this.height,
       slideTimeout: undefined as number | undefined
     }
@@ -166,6 +158,7 @@ export default VWindow.extend(mixins<ExtractVue<[typeof VWindow]>>(
         },
         on: {
           change: (val: any) => {
+            this.changedByControls = true
             this.internalValue = val
           }
         }
@@ -175,14 +168,6 @@ export default VWindow.extend(mixins<ExtractVue<[typeof VWindow]>>(
       VWindow.options.methods.init.call(this)
 
       this.startTimeout()
-    },
-    next () {
-      this.isReverse = false
-      VWindow.options.methods.next.call(this)
-    },
-    prev () {
-      this.isReverse = true
-      VWindow.options.methods.prev.call(this)
     },
     restartTimeout () {
       this.slideTimeout && clearTimeout(this.slideTimeout)
@@ -196,7 +181,13 @@ export default VWindow.extend(mixins<ExtractVue<[typeof VWindow]>>(
 
       this.slideTimeout = window.setTimeout(this.next, this.interval > 0 ? this.interval : 6000)
     },
-    updateReverse () { /* noop */ }
+    updateReverse (val: number, oldVal: number) {
+      if (this.changedByControls) {
+        this.changedByControls = false
+
+        VWindow.options.methods.updateReverse.call(this, val, oldVal)
+      }
+    }
   },
 
   render (h): VNode {
@@ -229,4 +220,4 @@ export default VWindow.extend(mixins<ExtractVue<[typeof VWindow]>>(
 
     return h('div', data, [children, this.genContainer()])
   }
-}))
+})

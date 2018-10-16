@@ -1,8 +1,8 @@
 // Extensions
-import { Group } from '../components/VItemGroup/VItemGroup'
+import { BaseItemGroup } from '../components/VItemGroup/VItemGroup'
 
 /* @vue/component */
-export default Group.extend({
+export default BaseItemGroup.extend({
   name: 'button-group',
 
   provide (): object {
@@ -20,7 +20,7 @@ export default Group.extend({
 
   computed: {
     classes (): object {
-      return Group.options.computed.classes.call(this)
+      return BaseItemGroup.options.computed.classes.call(this)
     }
   }
 })

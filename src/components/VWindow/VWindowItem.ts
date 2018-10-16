@@ -13,16 +13,17 @@ import {
   addOnceEventListener,
   convertToUnit
 } from '../../util/helpers'
-import mixins, { ExtractVue } from '../../util/mixins'
+import { ExtractVue } from './../../util/mixins'
+import mixins from '../../util/mixins'
 
 // Types
 import Vue from 'vue'
 import { VNode, VNodeDirective } from 'vue/types'
 
-type VWindowInstance = InstanceType<typeof VWindow>
+type VBaseWindow = InstanceType<typeof VWindow>
 
 interface options extends Vue {
-  windowGroup: VWindowInstance
+  windowGroup: VBaseWindow
 }
 
 export default mixins<options & ExtractVue<[typeof Bootable]>>(
@@ -37,6 +38,14 @@ export default mixins<options & ExtractVue<[typeof Bootable]>>(
   },
 
   props: {
+    reverseTransition: {
+      type: [Boolean, String],
+      default: undefined
+    },
+    transition: {
+      type: [Boolean, String],
+      default: undefined
+    },
     value: {
       required: false
     }
@@ -44,13 +53,22 @@ export default mixins<options & ExtractVue<[typeof Bootable]>>(
 
   data () {
     return {
-      isActive: false
+      isActive: false,
+      wasCancelled: false
     }
   },
 
   computed: {
-    computedTransition (): string {
-      return this.windowGroup.computedTransition
+    computedTransition (): string | boolean {
+      if (!this.windowGroup.internalReverse) {
+        return typeof this.transition !== 'undefined'
+          ? this.transition || ''
+          : this.windowGroup.computedTransition
+      }
+
+      return typeof this.reverseTransition !== 'undefined'
+        ? this.reverseTransition || ''
+        : this.windowGroup.computedTransition
     }
   },
 
@@ -59,6 +77,11 @@ export default mixins<options & ExtractVue<[typeof Bootable]>>(
       return this.$slots.default
     },
     onAfterEnter () {
+      if (this.wasCancelled) {
+        this.wasCancelled = false
+        return
+      }
+
       requestAnimationFrame(() => {
         this.windowGroup.internalHeight = undefined
         this.windowGroup.isActive = false
@@ -70,11 +93,23 @@ export default mixins<options & ExtractVue<[typeof Bootable]>>(
     onBeforeLeave (el: HTMLElement) {
       this.windowGroup.internalHeight = convertToUnit(el.clientHeight)
     },
+    onEnterCancelled () {
+      this.wasCancelled = true
+    },
     onEnter (el: HTMLElement, done: () => void) {
-      addOnceEventListener(el, 'transitionend', done)
+      const isBooted = this.windowGroup.isBooted
+
+      if (isBooted) {
+        addOnceEventListener(el, 'transitionend', done)
+      }
 
       requestAnimationFrame(() => {
         this.windowGroup.internalHeight = convertToUnit(el.clientHeight)
+
+        // On initial render, there is no transition
+        // Vue leaves a `enter` transition class
+        // if done is called too fast
+        !isBooted && setTimeout(done, 100)
       })
     }
   },
@@ -97,7 +132,8 @@ export default mixins<options & ExtractVue<[typeof Bootable]>>(
         afterEnter: this.onAfterEnter,
         beforeEnter: this.onBeforeEnter,
         beforeLeave: this.onBeforeLeave,
-        enter: this.onEnter
+        enter: this.onEnter,
+        enterCancelled: this.onEnterCancelled
       }
     }, [div])
   }
