@@ -60,13 +60,15 @@
         offset-y
         full-width
       >
-        <v-text-field
-          slot="activator"
-          v-model="start"
-          label="Start Date"
-          prepend-icon="event"
-          readonly
-        ></v-text-field>
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="start"
+            label="Start Date"
+            prepend-icon="event"
+            readonly
+            v-on="on"
+          ></v-text-field>
+        </template>
         <v-date-picker
           v-model="start"
           no-title
@@ -102,13 +104,15 @@
         offset-y
         full-width
       >
-        <v-text-field
-          slot="activator"
-          v-model="end"
-          label="End Date"
-          prepend-icon="event"
-          readonly
-        ></v-text-field>
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="end"
+            label="End Date"
+            prepend-icon="event"
+            readonly
+            v-on="on"
+          ></v-text-field>
+        </template>
         <v-date-picker
           v-model="end"
           no-title
@@ -143,13 +147,15 @@
         offset-y
         full-width
       >
-        <v-text-field
-          slot="activator"
-          v-model="now"
-          label="Today"
-          prepend-icon="event"
-          readonly
-        ></v-text-field>
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="now"
+            label="Today"
+            prepend-icon="event"
+            readonly
+            v-on="on"
+          ></v-text-field>
+        </template>
         <v-date-picker
           v-model="now"
           no-title
@@ -227,21 +233,16 @@
           :show-interval-label="showIntervalLabel"
           :color="color"
         >
-          <template
-            slot="day"
-            slot-scope="day"
-          >
-            <div
+          <template v-slot:day="day">
+            <v-sheet
               v-if="day.day % 3 === 0"
-              class="day"
+              :color="color"
+              class="white--text pa-1"
             >
               day slot {{ day.date }}
-            </div>
+            </v-sheet>
           </template>
-          <template
-            slot="day-header"
-            slot-scope="day"
-          >
+          <template v-slot:header="day">
             <div
               v-if="day.weekday % 2"
               class="day-header"
@@ -249,10 +250,7 @@
               day-header slot {{ day.date }}
             </div>
           </template>
-          <template
-            slot="day-body"
-            slot-scope="day"
-          >
+          <template v-slot:day-body="day">
             <div
               v-if="day.weekday % 3 === 2"
               class="day-body"
