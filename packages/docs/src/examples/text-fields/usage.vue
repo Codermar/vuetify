@@ -1,7 +1,7 @@
 <template>
   <v-form>
-    <v-container>
-      <v-layout row wrap>
+    <v-container grid-list-xl>
+      <v-layout wrap>
 
         <v-flex xs12 sm6 md3>
           <v-text-field
@@ -34,7 +34,7 @@
         <v-flex xs12 sm6 md3>
           <v-text-field
             label="Box"
-            box
+            filled
           ></v-text-field>
         </v-flex>
 
@@ -42,14 +42,14 @@
           <v-text-field
             label="Box"
             placeholder="Placeholder"
-            box
+            filled
           ></v-text-field>
         </v-flex>
 
         <v-flex xs12 sm6 md3>
           <v-text-field
             label="Outline"
-            outline
+            outlined
           ></v-text-field>
         </v-flex>
 
@@ -57,7 +57,7 @@
           <v-text-field
             label="Outline"
             placeholder="Placeholder"
-            outline
+            outlined
           ></v-text-field>
         </v-flex>
 
