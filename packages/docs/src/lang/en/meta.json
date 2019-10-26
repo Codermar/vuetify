@@ -11,7 +11,7 @@
   },
   "getting-started/quick-start": {
     "title": "Quick start",
-    "description": "Get started with Vue and Vuetify in no time. Support for vue-cli-3, Webpack, Nuxt and more.",
+    "description": "Get started with Vue and Vuetify in no time. Support for Vue CLI 3, Webpack, Nuxt and more.",
     "keywords": "quick start, vuetify templates, installing vuetify, install vuetify"
   },
   "getting-started/pre-made-layouts": {
@@ -43,6 +43,11 @@
     "title": "Sponsors and backers",
     "description": "Help support Vuetify by backing the project. This helps with the maintenance of existing features and the development of new ones.",
     "keywords": "sponsor, backer, donations, patron, supporting vuetify, vuetify support"
+  },
+  "getting-started/releases-and-migrations": {
+    "title": "Releases and migrations",
+    "description": "Stay up to date with the latest release notes. The migration guides will also help you migrate applications though major releases.",
+    "keywords": "migration, releases, upgrading vuetify"
   },
   "getting-started/long-term-support": {
     "title": "Long-term support",
@@ -109,10 +114,10 @@
     "description": "Setup your application's theme and supplemental colors in a flash.",
     "keywords": "themes"
   },
-  "styles/alignment": {
-    "title": "CSS Alignment helpers",
-    "description": "Alignment helpers assist in modifying your application layout on varying viewport sizes with pre-configured css classes.",
-    "keywords": "alignment helper classes, alignment classes, alignment helpers"
+  "styles/text": {
+    "title": "CSS Text helpers",
+    "description": "Text helpers assist in modifying your application layout on varying viewport sizes with pre-configured css classes.",
+    "keywords": "Text helper classes, text classes, alignment helpers"
   },
   "styles/colors": {
     "title": "Material color palette",
@@ -129,10 +134,20 @@
     "description": "Display helper classes allow you to control when elements should display based upon viewport.",
     "keywords": "display helper classes, display classes, vuetify display"
   },
+  "styles/float": {
+    "title": "CSS Float helpers",
+    "description": "Float helper classes allow you to control the float property of an element based upon the viewport size.",
+    "keywords": "float helper classes, float classes, vuetify float"
+  },
   "styles/elevation": {
     "title": "CSS Elevation helpers",
     "description": "Elevation helper classes allow you to control relative depth, or distance, between two surfaces along the z-axis.",
     "keywords": "elevation helper classes, elevation classes, vuetify elevation"
+  },
+  "styles/flex": {
+    "title": "CSS Flex helpers",
+    "description": "Flex helper classes allow you to modify flexbox parents and children.",
+    "keywords": "flex helper classes, flex classes, vuetify flex"
   },
   "styles/scroll": {
     "title": "Smooth scrolling",
@@ -334,11 +349,6 @@
     "description": "Vuetify supports the 12 point Material Design grid for laying out and controlling breakpoints for your application.",
     "keywords": "grids, vuetify grid component, layout component, flex component"
   },
-  "components/grid-lists": {
-    "title": "Grid list component",
-    "description": "Grid lists allow you to specify the gutter used when separating grid items.",
-    "keywords": "grid lists, vuetify grid list component, vue grid list component"
-  },
   "components/file-inputs": {
     "title": "File input component",
     "description": "The file input component is a specialized input that provides a clean interface for selecting files, showing detailed selection information and upload progress.",
@@ -373,6 +383,11 @@
     "title": "Item group component",
     "description": "The item group components provides the ability to create a group of selectable items out of any component.",
     "keywords": "item groups, vuetify item group component, vue item group component"
+  },
+  "components/lazy": {
+    "title": "Lazy component",
+    "description": "The lazy component allows you to dynamically render content based upon the user's viewport.",
+    "keywords": "lazy loading"
   },
   "components/lists": {
     "title": "List component",
@@ -443,6 +458,11 @@
     "title": "Sheet component",
     "description": "The sheet component is the default paper element in Vuetify and serves as the baseline for many Material Design implementations.",
     "keywords": "sheets, vuetify sheet component, vue sheet component"
+  },
+  "components/skeleton-loaders": {
+    "title": "Skeleton loaders component",
+    "description": "The v-skeleton-loader component is a versatile tool that can fill many roles within a project. At its heart, the component provides an indication to the user that something is coming but not yet available.",
+    "keywords": "skeleton-loader, material loader, bar loader"
   },
   "components/simple-tables": {
     "title": "Simple table component",
@@ -533,6 +553,16 @@
     "title": "Window component",
     "description": "The window component is a wrapper container that allows transitioning between content. It serves as the baseline for tabs and carousels.",
     "keywords": "windows, vuetify window component, vue window component"
+  },
+  "directives/intersect": {
+    "title": "Intersection observer directive",
+    "description": "The intersection observer directive utilizes the Intersection observer API. It allows you to determine when elements are visible on the screen.",
+    "keywords": "intersect, vuetify intersect directive, intersection observer directive"
+  },
+  "directives/mutate": {
+    "title": "Mutation observer directive",
+    "description": "The mutation observer directive utilizes the Mutation observer API. It allows you to determine when elements are updated.",
+    "keywords": "mutate, vuetify mutate directive, mutation observer directive"
   },
   "directives/resizing": {
     "title": "Resizing directive",

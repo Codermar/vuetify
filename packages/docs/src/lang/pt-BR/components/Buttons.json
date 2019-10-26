@@ -15,14 +15,14 @@
     },
     "dropdown": {
       "header": "Variantes de Botão com Menu Suspenso",
-      "desc": "Os botões com menu suspenso são seleções normais com estilo adicional."
+      "desc": "Os botões com menu suspenso são seleções normais com estilo adicional.",
+      "uninverted": true
     },
     "icon": {
       "desc": "Ícones podem ser usados para o contúdo principal de um botão."
     },
     "floating": {
-      "header": "Flutuante",
-      "desc": "Botões flutuantes são redondos e geralmente contêm um ícone."
+      "header": "Flutuante"
     },
     "loaders": {
       "header": "Carregamento",
@@ -32,12 +32,8 @@
       "header": "Dimensionamento",
       "desc": "Botões podem receber diferentes opções de tamanhos para se adequarem a uma infinidade de cenários."
     },
-    "outline": {
-      "header": "Contorno",
-      "desc": "Botões com contorno herdam suas bordas da cor atual aplicada."
-    },
-    "round": {
-      "desc": "Botões arredondados comportam da mesma maneira que botões comuns, mas possuem cantos arredondadas."
+    "outlined": {
+      "header": "### Contorno"
     },
     "block": {
       "header": "Bloco",

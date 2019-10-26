@@ -16,10 +16,15 @@
     "combobox-multiple": {
       "header": "crwdns40584:0crwdne40584:0",
       "desc": "crwdns40586:0crwdne40586:0"
+    },
+    "dense": {
+      "header": "crwdns43134:0crwdne43134:0",
+      "desc": "crwdns43136:0crwdne43136:0"
     }
   },
   "props": {
     "dark": "crwdns40588:0crwdne40588:0",
+    "delimiters": "crwdns42576:0crwdne42576:0",
     "value": "crwdns34122:0crwdne34122:0"
   },
   "slots": {
@@ -41,6 +46,7 @@
     "click:prepend": "crwdns34150:0crwdne34150:0",
     "click:prepend-inner": "crwdns34152:0crwdne34152:0",
     "update:error": "crwdns34154:0crwdne34154:0",
+    "update:list-index": "crwdns43138:0crwdne43138:0",
     "update:search-input": "crwdns40594:0crwdne40594:0"
   }
 }

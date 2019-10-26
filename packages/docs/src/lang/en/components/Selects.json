@@ -34,6 +34,10 @@
       "header": "### Disabled",
       "desc": "You cannot use disabled `v-select`."
     },
+    "dense": {
+      "header": "### Dense",
+      "desc": "You can use `dense` prop to reduce the field height and lower max height of list items."
+    },
     "readonly": {
       "header": "### Read-only",
       "desc": "You cannot use read-only `v-select`, but it looks default."
@@ -53,7 +57,6 @@
     "dark": "Components.Inputs.props.dark",
     "debounceSearch": "Debounces the search input value being emitted",
     "deletableChips": "Adds a remove icon to selected chips",
-    "dense": "Lowers max height of list items",
     "disabled": "Disables the input",
     "eager": "Mixins.Bootable.props.eager",
     "editable": " Creates an editable button - [spec](https://material.io/guidelines/components/buttons.html#buttons-dropdown-buttons)",
@@ -61,7 +64,7 @@
     "hideSelected": "Do not display in the select menu items that are already selected",
     "itemColor": "Sets color of selected items",
     "itemDisabled": "Set property of **items**'s disabled value",
-    "items": "Can be an array of objects or array of strings. When using objects, will look for a text and value field. This can be changed using the **item-text** and **item-value** props.",
+    "items": "Can be an array of objects or array of strings. When using objects, will look for a text and value field. This can be changed using the **item-text** and **item-value** props.  Objects that have a **header** or **divider** property are considered special cases and generate a list header or divider; these items are not selectable.",
     "itemText": "Set property of **items**'s text value",
     "itemValue": "Set property of **items**'s value - **must be primitive**. Dot notation is supported",
     "menuProps": "Pass props through to the `v-menu` component. Accepts either a string for boolean props `menu-props=\"auto, overflowY\"`, or an object `:menu-props=\"{ auto: true, overflowY: true }\"`",
@@ -100,6 +103,7 @@
     "click:prepend-inner": "Components.TextFields.events['click:prepend-inner']",
     "focus": "Emitted when component is focused",
     "update:error": "Mixins.Validatable.events['update:error']",
+    "update:list-index": "Emitted when menu item is selected using keyboard arrows",
     "update:search-input": "The `search-input.sync` event"
   }
 }

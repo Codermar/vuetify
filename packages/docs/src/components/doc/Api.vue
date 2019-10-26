@@ -10,11 +10,14 @@
         height="auto"
       >
         <v-layout wrap>
-          <v-flex xs12 md4>
+          <v-flex
+            xs12
+            md4
+          >
             <v-select
               v-model="current"
               :items="value"
-              :class="$vuetify.breakpoint.mdAndUp ? '' : 'mb-3'"
+              :class="$vuetify.breakpoint.mdAndUp ? '' : 'mb-6'"
               label="Available Component(s)"
               outlined
               :menu-props="{offsetY: true, contentClass: 'primary'}"
@@ -22,12 +25,16 @@
               hide-details
             />
           </v-flex>
-          <v-flex xs12 md4 offset-md4>
+          <v-flex
+            xs12
+            md4
+            offset-md4
+          >
             <v-text-field
               v-model="search"
               type="search"
               clearable
-              append-icon="search"
+              append-icon="mdi-magnify"
               label="Search..."
               outlined
               hide-details
@@ -43,9 +50,8 @@
         :slider-color="computedTabs.length ? 'primary' : 'transparent'"
       >
         <v-tab
-          v-for="(tab) in computedTabs"
-          :key="`tab-${tab}`"
-          :href="`#${tab}`"
+          v-for="(tab, i) in computedTabs"
+          :key="`tab-${i}`"
           :class="[$vuetify.breakpoint.smAndUp && 'justify-start']"
         >
           {{ tab.replace(/([A-Z])/g, ' $1') }}
@@ -60,7 +66,6 @@
           <v-tab-item
             v-for="(tab, i) in computedTabs"
             :key="`tab-item-${i}`"
-            :value="tab"
             class="overflow-y-auto"
             eager
             style="max-height: 800px;"

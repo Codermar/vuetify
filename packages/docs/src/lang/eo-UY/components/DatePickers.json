@@ -13,7 +13,7 @@
       "header": "crwdns38564:0crwdne38564:0"
     },
     "date-current": {
-      "desc": "crwdns38566:0crwdne38566:0",
+      "desc": "crwdns42360:0crwdne42360:0",
       "header": "crwdns38568:0crwdne38568:0"
     },
     "date-dialog-and-menu": {
@@ -44,6 +44,10 @@
       "desc": "crwdns38594:0crwdne38594:0",
       "header": "crwdns38596:0crwdne38596:0"
     },
+    "date-range": {
+      "desc": "crwdns43000:0crwdne43000:0",
+      "header": "crwdns43002:0crwdne43002:0"
+    },
     "date-picker-date": {
       "desc": "crwdns38598:0crwdne38598:0",
       "header": "crwdns38600:0crwdne38600:0"
@@ -65,7 +69,7 @@
       "header": "crwdns38616:0crwdne38616:0"
     },
     "month-current": {
-      "desc": "crwdns38618:0crwdne38618:0",
+      "desc": "crwdns42362:0crwdne42362:0",
       "header": "crwdns38620:0crwdne38620:0"
     },
     "month-dialog-and-menu": {
@@ -122,6 +126,7 @@
     "nextIcon": "crwdns32402:0crwdne32402:0",
     "pickerDate": "crwdns32404:0crwdne32404:0",
     "prevIcon": "crwdns32406:0crwdne32406:0",
+    "range": "crwdns43004:0crwdne43004:0",
     "reactive": "crwdns32408:0crwdne32408:0",
     "readonly": "crwdns32410:0crwdne32410:0",
     "scrollable": "crwdns32412:0crwdne32412:0",
