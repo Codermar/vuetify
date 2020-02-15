@@ -12,8 +12,7 @@ import pad from '../VDatePicker/util/pad'
 import mixins from '../../util/mixins'
 
 // Types
-import { VNode } from 'vue'
-import { PropValidator } from 'vue/types/options'
+import { VNode, PropType } from 'vue'
 import { SelectingTimes } from './SelectingTimes'
 
 const rangeHours24 = createRange(24)
@@ -34,29 +33,23 @@ export default mixins(
   name: 'v-time-picker',
 
   props: {
-    allowedHours: {
-      type: [Function, Array],
-    } as PropValidator<AllowFunction | number[]>,
-    allowedMinutes: {
-      type: [Function, Array],
-    } as PropValidator<AllowFunction | number[]>,
-    allowedSeconds: {
-      type: [Function, Array],
-    } as PropValidator<AllowFunction | number[]>,
+    allowedHours: [Function, Array] as PropType<AllowFunction | number[]>,
+    allowedMinutes: [Function, Array] as PropType<AllowFunction | number[]>,
+    allowedSeconds: [Function, Array] as PropType<AllowFunction | number[]>,
     disabled: Boolean,
     format: {
-      type: String,
+      type: String as PropType<'ampm' | '24hr'>,
       default: 'ampm',
       validator (val) {
         return ['ampm', '24hr'].includes(val)
       },
-    } as PropValidator<'ampm' | '24hr'>,
+    },
     min: String,
     max: String,
     readonly: Boolean,
     scrollable: Boolean,
     useSeconds: Boolean,
-    value: null as any as PropValidator<any>,
+    value: null as any as PropType<any>,
     ampmInTitle: Boolean,
   },
 
@@ -357,7 +350,7 @@ export default mixins(
         },
         on: {
           'update:selecting': (value: 1 | 2 | 3) => (this.selecting = value),
-          'update:period': this.setPeriod,
+          'update:period': (period: string) => this.$emit('update:period', period),
         },
         ref: 'title',
         slot: 'title',

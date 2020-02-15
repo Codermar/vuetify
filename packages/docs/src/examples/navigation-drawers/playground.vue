@@ -1,5 +1,5 @@
 <template>
-  <v-row align="stretch">
+  <v-container>
     <v-row justify="space-around">
       <v-col cols="12">
         <v-select
@@ -58,7 +58,7 @@
           nav
           class="py-0"
         >
-          <v-list-item two-line>
+          <v-list-item two-line :class="miniVariant && 'px-0'">
             <v-list-item-avatar>
               <img src="https://randomuser.me/api/portraits/men/81.jpg">
             </v-list-item-avatar>
@@ -87,7 +87,7 @@
         </v-list>
       </v-navigation-drawer>
     </v-card>
-  </v-row>
+  </v-container>
 </template>
 
 <script>
